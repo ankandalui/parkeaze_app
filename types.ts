@@ -1,3 +1,5 @@
+// Type 1 react native code
+
 import { Href } from "expo-router";
 import { Firestore, Timestamp } from "firebase/firestore";
 import { Icon } from "phosphor-react-native";
@@ -14,6 +16,7 @@ import {
   TouchableOpacityProps,
   ViewStyle,
 } from "react-native";
+import { Region } from "react-native-maps";
 
 export type ScreenWrapperProps = {
   style?: ViewStyle;
@@ -161,6 +164,17 @@ export type ResponseType = {
   msg?: string;
 };
 
+export interface FloorType {
+  floorNumber: string;
+  floorName: string;
+  slots: SlotType[];
+}
+
+export interface SlotType {
+  id: string;
+  slotNumber: string;
+}
+
 export type WalletType = {
   id?: string;
   name: string;
@@ -171,3 +185,140 @@ export type WalletType = {
   uid?: string;
   created?: Date;
 };
+
+export type ParkingSpotType = {
+  id: string;
+  locationName: string;
+  parkingName: string;
+  latitude: number;
+  longitude: number;
+  type: "public" | "private";
+  price: number | null;
+  totalSpots: number;
+  description?: string;
+  features?: string[];
+  operatingHours: {
+    open: string;
+    close: string;
+  };
+  address: string;
+  rating?: number;
+  reviews?: number;
+  floors: FloorType[];
+};
+
+export type ParkingSearchFilters = {
+  type?: "public" | "private" | "all";
+  maxPrice?: number;
+  features?: string[];
+  radius?: number;
+};
+
+export type CarType = "suv" | "sedan" | "coupe";
+
+export type BookingStatus = "pending" | "confirmed" | "cancelled" | "completed";
+
+export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
+
+export type BookingType = {
+  id?: string;
+  // User Details (from auth)
+  userId: string;
+  userName: string;
+  userEmail: string;
+
+  // Additional User Input
+  phoneNumber: string;
+
+  // Car Details
+  carType: CarType;
+  carName: string;
+  carNumber: string;
+
+  // Parking & Payment Details
+  parkingSpotId: string;
+  parkingSpotDetails: ParkingSpotType;
+  bookingStatus: BookingStatus;
+  paymentStatus: PaymentStatus;
+  amount: number;
+
+  // Timestamps
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+
+  // Optional fields for future use
+  specialRequests?: string;
+  cancellationReason?: string;
+};
+
+export type PaymentDetailsType = {
+  bookingId: string;
+  amount: number;
+  parkingName: string;
+  transactionId?: string; // Generated after successful payment
+  paymentTime?: Timestamp;
+  status: PaymentStatus;
+};
+
+export type BookingResponseType = ResponseType & {
+  bookingId?: string;
+  paymentDetails?: PaymentDetailsType;
+};
+export interface Place extends ParkingSpotType {
+  isParkingSpot?: boolean;
+  parkingData?: ParkingSpotType;
+}
+
+interface LatLng {
+  latitude: number; // Note: React Native uses latitude/longitude instead of lat/lng
+  longitude: number;
+}
+
+export interface ParkingFormData {
+  locationName: string;
+  parkingName: string;
+  type: "public" | "private";
+  totalSpots: string;
+  price: string;
+  address: string;
+  openTime: string;
+  closeTime: string;
+  features: string;
+  description: string;
+  floors: FloorType[];
+}
+export interface VoiceInteractionProps {
+  onSearchPlace: (location: string) => void;
+  children: React.ReactNode;
+}
+
+export interface CustomMapRef {
+  searchLocation: (location: string) => void;
+}
+
+export interface GeminiResponse {
+  candidates: Array<{
+    content: {
+      parts: Array<{
+        text: string;
+      }>;
+    };
+  }>;
+}
+
+export interface VoiceState {
+  isListening: boolean;
+  isProcessing: boolean;
+  error: string | null;
+}
+
+export interface AnimationState {
+  isVisible: boolean;
+  message: string;
+}
+
+export interface LocationSearchResult {
+  success: boolean;
+  location?: Region;
+  error?: string;
+}

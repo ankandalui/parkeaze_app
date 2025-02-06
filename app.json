@@ -15,7 +15,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "RECORD_AUDIO",
+        "MODIFY_AUDIO_SETTINGS",
+        "android.permission.RECORD_AUDIO",
+        "RECORD_AUDIO",
+        "MODIFY_AUDIO_SETTINGS",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.spartans.parkeazelatest"
     },
     "web": {
       "bundler": "metro",
