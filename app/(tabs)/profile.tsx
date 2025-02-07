@@ -30,7 +30,7 @@ const Profile = () => {
     {
       title: "See Bookings",
       icon: <Icons.Ticket size={26} color={colors.white} weight="fill" />,
-      // routeName: "/(modals)/profileModal",
+      routeName: "/(modals)/seeBookingsModal",
       bgColor: "#059669",
     },
     {

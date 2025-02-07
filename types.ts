@@ -249,6 +249,8 @@ export type BookingType = {
   // Optional fields for future use
   specialRequests?: string;
   cancellationReason?: string;
+  slotNumber?: string;
+  slotId?: string;
 };
 
 export type PaymentDetailsType = {
