@@ -172,6 +172,10 @@ const TicketModal = () => {
     router.push("/(modals)/seeBookingsModal");
   };
 
+  const handleBackPress = () => {
+    router.push("/(tabs)");
+  };
+
   const TicketContent = () => (
     <View style={styles.ticketContainer}>
       <View style={styles.qrSection}>
@@ -265,26 +269,19 @@ const TicketModal = () => {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+      <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
+        <MaterialIcons name="arrow-back" size={24} color={colors.white} />
+      </TouchableOpacity>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <Header
-          title="Update Profile"
-          leftIcon={<BackButton />}
-          style={{ marginBottom: spacingY._10 }}
-        /> */}
         <LinearGradient
           colors={[colors.primary, colors.primaryDark]}
           style={styles.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         >
-          <Header
-            title="Booking Confirmed!"
-            leftIcon={<BackButton />}
-            style={{ marginBottom: spacingY._5 }}
-          />
-          {/* <Typo size={24} color={colors.white} fontWeight="700">
+          <Typo size={24} color={colors.white} fontWeight="700">
             Booking Confirmed!
-          </Typo> */}
+          </Typo>
           <Typo size={16} color={colors.neutral100}>
             Your parking spot is reserved
           </Typo>
@@ -413,6 +410,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacingX._5,
     padding: spacingX._10,
+  },
+  backButton: {
+    position: "absolute",
+    top: Platform.OS === "ios" ? 60 : 30,
+    left: spacingX._20,
+    zIndex: 1,
+    padding: spacingX._10,
+    borderRadius: radius._30,
   },
 });
 

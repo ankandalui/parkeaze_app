@@ -22,6 +22,7 @@ export const colors = {
   neutral700: "#404040",
   neutral800: "#262626",
   neutral900: "#171717",
+  error: "#FF4B4B",
 };
 
 export const spacingX = {

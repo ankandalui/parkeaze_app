@@ -36,7 +36,7 @@ const Profile = () => {
     {
       title: "Contact Us",
       icon: <Icons.PhoneCall size={26} color={colors.white} weight="fill" />,
-      // routeName: "/(modals)/profileModal",
+      routeName: "/(modals)/navModal",
       bgColor: colors.neutral600,
     },
     {
@@ -44,6 +44,28 @@ const Profile = () => {
       icon: <Icons.Power size={26} color={colors.white} weight="fill" />,
       routeName: "/(modals)/profileModal",
       bgColor: "#e11d48",
+    },
+    {
+      title: "Stack parking",
+      icon: <Icons.Stack size={26} color={colors.white} weight="fill" />,
+      routeName: "/(modals)/stackParkingModal",
+      bgColor: "#0ae88f",
+    },
+    // {
+    //   title: "Navigation",
+    //   icon: (
+    //     <Icons.NavigationArrow size={26} color={colors.white} weight="fill" />
+    //   ),
+    //   routeName: "/(modals)/navModal",
+    //   bgColor: "#4f31e7",
+    // },
+    {
+      title: "Notification",
+      icon: (
+        <Icons.NavigationArrow size={26} color={colors.white} weight="fill" />
+      ),
+      routeName: "/(modals)/notificationModal",
+      bgColor: "#388313",
     },
   ];
 

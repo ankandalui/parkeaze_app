@@ -185,6 +185,19 @@ export type WalletType = {
   uid?: string;
   created?: Date;
 };
+export interface RealTimeData {
+  slots: { [key: string]: boolean };
+  availableSpots: number;
+}
+export interface ParkingSlot {
+  id: string;
+  slotNumber: string;
+}
+export interface ParkingFloor {
+  floorNumber: number;
+  floorName: string;
+  slots: ParkingSlot[];
+}
 
 export type ParkingSpotType = {
   id: string;
@@ -195,6 +208,7 @@ export type ParkingSpotType = {
   type: "public" | "private";
   price: number | null;
   totalSpots: number;
+  availableSpots?: number;
   description?: string;
   features?: string[];
   operatingHours: {
@@ -205,6 +219,7 @@ export type ParkingSpotType = {
   rating?: number;
   reviews?: number;
   floors: FloorType[];
+  realTimeData?: RealTimeData;
 };
 
 export type ParkingSearchFilters = {
@@ -212,6 +227,7 @@ export type ParkingSearchFilters = {
   maxPrice?: number;
   features?: string[];
   radius?: number;
+  minAvailableSpots?: number;
 };
 
 export type CarType = "suv" | "sedan" | "coupe";
@@ -222,54 +238,51 @@ export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
 
 export type BookingType = {
   id?: string;
-  // User Details (from auth)
   userId: string;
   userName: string;
   userEmail: string;
-
-  // Additional User Input
   phoneNumber: string;
-
-  // Car Details
   carType: CarType;
   carName: string;
   carNumber: string;
-
-  // Parking & Payment Details
   parkingSpotId: string;
   parkingSpotDetails: ParkingSpotType;
-  bookingStatus: BookingStatus;
-  paymentStatus: PaymentStatus;
+  slotId: string; // Added for slot tracking
+  slotNumber: string; // Added for slot identification
+  startTime: Date | Timestamp;
+  endTime: Date | Timestamp;
+  duration: number;
+  timerStarted: boolean; // Duration in hours
+  paymentTime?: Date | Timestamp;
+  paymentMethod?: string;
   amount: number;
-
-  // Timestamps
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-
-  // Optional fields for future use
-  specialRequests?: string;
-  cancellationReason?: string;
-  slotNumber?: string;
-  slotId?: string;
+  bookingStatus?: BookingStatus;
+  paymentStatus?: PaymentStatus;
+  createdAt?: any;
+  updatedAt?: any;
 };
 
 export type PaymentDetailsType = {
   bookingId: string;
   amount: number;
   parkingName: string;
-  transactionId?: string; // Generated after successful payment
-  paymentTime?: Timestamp;
+  transactionId?: string;
+  paymentTime?: Date | Timestamp;
   status: PaymentStatus;
+  paymentMethod?: string;
 };
 
-export type BookingResponseType = ResponseType & {
+export type BookingResponseType = {
+  success: boolean;
   bookingId?: string;
   paymentDetails?: PaymentDetailsType;
+  msg?: string;
 };
 export interface Place extends ParkingSpotType {
   isParkingSpot?: boolean;
   parkingData?: ParkingSpotType;
 }
+export type EmailAlertType = "warning" | "expired";
 
 interface LatLng {
   latitude: number; // Note: React Native uses latitude/longitude instead of lat/lng
@@ -323,4 +336,54 @@ export interface LocationSearchResult {
   success: boolean;
   location?: Region;
   error?: string;
+}
+
+export interface Coordinates {
+  [key: string]: [number, number];
+}
+
+export interface PathInfo {
+  path: string[];
+  distance: number;
+}
+
+export interface ApiResponse {
+  nodes: string[];
+  coordinates: Coordinates;
+  image?: string;
+  path?: string[];
+  distance?: number;
+  error?: string;
+}
+
+export interface GeminiResponse {
+  candidates: Array<{
+    content: {
+      parts: Array<{
+        text: string;
+      }>;
+    };
+  }>;
+}
+
+export interface NavigationStyles {
+  safeArea: {
+    flex: number;
+    backgroundColor: string;
+    paddingTop: number | undefined;
+  };
+  container: {
+    flex: number;
+    backgroundColor: string;
+  };
+  content: {
+    padding: number;
+  };
+  error: {
+    color: string;
+    marginBottom: number;
+    textAlign: string;
+    fontSize: number;
+  };
+  [key: string]: any;
 }
