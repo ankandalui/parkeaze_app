@@ -72,3 +72,6 @@ while True:
 # Release the video capture and close windows
 cap.release()
 cv2.destroyAllWindows()
+
+
+

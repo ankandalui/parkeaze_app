@@ -3,7 +3,6 @@ import { View, StyleSheet } from "react-native";
 import { Clock } from "lucide-react-native";
 import { colors, radius, spacingX } from "@/constants/theme";
 import Typo from "@/components/Typo";
-
 import { BookingType } from "@/types";
 import { useBookingTimer } from "@/services/useBookingTimer";
 
@@ -18,7 +17,7 @@ export const ParkingTimer: React.FC<ParkingTimerProps> = ({
   onTimeWarning,
   onTimeExpired,
 }) => {
-  const { formattedTime, isExpired, isWarningTime, isWaiting } =
+  const { formattedTime, isExpired, isWarningTime, isStarted } =
     useBookingTimer({
       booking,
       onTimeWarning,
@@ -26,7 +25,7 @@ export const ParkingTimer: React.FC<ParkingTimerProps> = ({
     });
 
   const getStatusColor = () => {
-    if (isWaiting) return colors.neutral600;
+    if (!isStarted) return colors.neutral600;
     if (isExpired) return colors.error;
     if (isWarningTime) return colors.rose;
     return colors.primary;
@@ -40,7 +39,7 @@ export const ParkingTimer: React.FC<ParkingTimerProps> = ({
         styles.container,
         {
           borderColor: statusColor,
-          backgroundColor: isWaiting ? colors.neutral100 : colors.white,
+          backgroundColor: !isStarted ? colors.neutral100 : colors.white,
         },
       ]}
     >

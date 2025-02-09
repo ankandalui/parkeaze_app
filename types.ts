@@ -249,6 +249,34 @@ export type BookingType = {
   parkingSpotDetails: ParkingSpotType;
   slotId: string; // Added for slot tracking
   slotNumber: string; // Added for slot identification
+  startTime: Date | any;
+  endTime: Date | Timestamp;
+  duration: number;
+  timerStarted: boolean; // Duration in hours
+  paymentTime?: Date | Timestamp;
+  paymentMethod?: string;
+  amount: number;
+  bookingStatus?: BookingStatus;
+  paymentStatus?: PaymentStatus;
+  transactionId?: string;
+  createdAt?: any;
+  updatedAt?: any;
+  warningNotificationSent?: boolean;
+};
+export type BookingTypeDemo = {
+  id?: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  phoneNumber: string;
+  carType: CarType;
+  carName: string;
+  carNumber: string;
+  parkingSpotId: string;
+  parkingSpotDetails: ParkingSpotType;
+  parKingSpotName: string;
+  slotId: string; // Added for slot tracking
+  slotNumber: string; // Added for slot identification
   startTime: Date | Timestamp;
   endTime: Date | Timestamp;
   duration: number;
@@ -258,8 +286,11 @@ export type BookingType = {
   amount: number;
   bookingStatus?: BookingStatus;
   paymentStatus?: PaymentStatus;
+  transactionId?: string;
   createdAt?: any;
   updatedAt?: any;
+  status?: string;
+  isActive?: boolean;
 };
 
 export type PaymentDetailsType = {

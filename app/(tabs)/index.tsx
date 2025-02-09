@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import { StyleSheet, RefreshControl, ScrollView } from "react-native";
 import CustomMap, { CustomMapRef } from "@/components/CustomMap";
+import * as Notifications from "expo-notifications";
 
 const Home: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -14,6 +15,15 @@ const Home: React.FC = () => {
       setRefreshing(false);
     }
   };
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      priority: Notifications.AndroidNotificationPriority.MAX,
+    }),
+  });
 
   return (
     <ScrollView

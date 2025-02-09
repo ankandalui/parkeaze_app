@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { BookingType } from "@/types";
-import { Timestamp } from "firebase/firestore";
 import { completeBooking } from "@/services/bookingService";
 import {
   sendParkingReminder,
@@ -13,7 +12,7 @@ interface UseBookingTimerProps {
   onTimeExpired?: () => void;
 }
 
-const getDateFromTimestamp = (time: Date | Timestamp): Date => {
+const getDateFromTimestamp = (time: Date | any): Date => {
   if (time instanceof Date) return time;
   return time.toDate();
 };
@@ -27,56 +26,64 @@ export const useBookingTimer = ({
   const [isWarningShown, setIsWarningShown] = useState(false);
   const [isExpiredShown, setIsExpiredShown] = useState(false);
 
-  useEffect(() => {
-    if (!booking.timerStarted) {
-      return;
+  const handleExpiry = useCallback(async () => {
+    if (booking.id && !isExpiredShown) {
+      setIsExpiredShown(true);
+      await sendParkingExpired(booking);
+      await completeBooking(booking.id);
+      onTimeExpired?.();
     }
+  }, [booking, isExpiredShown, onTimeExpired]);
+
+  const handleWarning = useCallback(async () => {
+    if (!isWarningShown) {
+      setIsWarningShown(true);
+      await sendParkingReminder(booking);
+      onTimeWarning?.();
+    }
+  }, [booking, isWarningShown, onTimeWarning]);
+
+  useEffect(() => {
+    if (!booking.startTime) return;
 
     const startTime = getDateFromTimestamp(booking.startTime);
     const endTime = new Date(
       startTime.getTime() + booking.duration * 60 * 60 * 1000
     );
 
-    const updateTimer = async () => {
+    const updateTimer = () => {
       const now = new Date();
       const remaining = endTime.getTime() - now.getTime();
       setTimeRemaining(remaining);
 
-      // Warning notification at 15 minutes
-      if (remaining <= 15 * 60 * 1000 && !isWarningShown) {
-        setIsWarningShown(true);
-        await sendParkingReminder(booking);
-        onTimeWarning?.();
+      if (remaining <= 15 * 60 * 1000 && remaining > 0) {
+        handleWarning();
       }
 
-      // Handle expired time
-      if (remaining <= 0 && !isExpiredShown) {
-        setIsExpiredShown(true);
-        await sendParkingExpired(booking);
-
-        // Automatically complete the booking
-        if (booking.id) {
-          await completeBooking(booking.id);
-        }
-
-        onTimeExpired?.();
+      if (remaining <= 0) {
+        handleExpiry();
       }
     };
 
-    const timer = setInterval(updateTimer, 60 * 1000);
-    updateTimer(); // Initial update
+    const timer = setInterval(updateTimer, 1000);
+    updateTimer();
 
     return () => clearInterval(timer);
-  }, [booking, onTimeWarning, onTimeExpired, isWarningShown, isExpiredShown]);
+  }, [booking, handleWarning, handleExpiry]);
 
   const formatTimeRemaining = () => {
-    if (!booking.timerStarted) return "Waiting...";
+    if (!booking.startTime) return "Not Started";
     if (timeRemaining <= 0) return "Expired";
 
     const hours = Math.floor(timeRemaining / (60 * 60 * 1000));
     const minutes = Math.floor(
       (timeRemaining % (60 * 60 * 1000)) / (60 * 1000)
     );
+    const seconds = Math.floor((timeRemaining % (60 * 1000)) / 1000);
+
+    if (booking.duration < 0.5) {
+      return `${minutes}m ${seconds}s`;
+    }
 
     return `${hours}h ${minutes}m`;
   };
@@ -85,7 +92,7 @@ export const useBookingTimer = ({
     timeRemaining,
     formattedTime: formatTimeRemaining(),
     isExpired: timeRemaining <= 0,
-    isWarningTime: timeRemaining <= 15 * 60 * 1000,
-    isWaiting: !booking.timerStarted,
+    isWarningTime: timeRemaining <= 15 * 60 * 1000 && timeRemaining > 0,
+    isStarted: !!booking.startTime,
   };
 };

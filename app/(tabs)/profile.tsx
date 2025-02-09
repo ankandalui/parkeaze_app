@@ -51,22 +51,22 @@ const Profile = () => {
       routeName: "/(modals)/stackParkingModal",
       bgColor: "#0ae88f",
     },
-    // {
-    //   title: "Navigation",
-    //   icon: (
-    //     <Icons.NavigationArrow size={26} color={colors.white} weight="fill" />
-    //   ),
-    //   routeName: "/(modals)/navModal",
-    //   bgColor: "#4f31e7",
-    // },
     {
-      title: "Notification",
+      title: "Navigation",
       icon: (
         <Icons.NavigationArrow size={26} color={colors.white} weight="fill" />
       ),
-      routeName: "/(modals)/notificationModal",
-      bgColor: "#388313",
+      routeName: "/(modals)/navModal",
+      bgColor: "#4f31e7",
     },
+    // {
+    //   title: "Notification",
+    //   icon: (
+    //     <Icons.NavigationArrow size={26} color={colors.white} weight="fill" />
+    //   ),
+    //   routeName: "/(modals)/notificationModal",
+    //   bgColor: "#388313",
+    // },
   ];
 
   const handleLogout = async () => {

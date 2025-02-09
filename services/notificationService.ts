@@ -1,6 +1,6 @@
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
-import { BookingType, PaymentStatus } from "@/types";
+import { BookingType } from "@/types";
 
 // Configure notifications
 Notifications.setNotificationHandler({
@@ -14,15 +14,8 @@ Notifications.setNotificationHandler({
 // Initialize notification channels
 export const initializeNotifications = async () => {
   if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-
-    await Notifications.setNotificationChannelAsync("payment-alerts", {
-      name: "Payment Alerts",
+    await Notifications.setNotificationChannelAsync("parking-alerts", {
+      name: "Parking Alerts",
       importance: Notifications.AndroidImportance.HIGH,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FF231F7C",
@@ -53,7 +46,8 @@ export const requestNotificationPermissions = async () => {
 export const sendNotification = async (
   title: string,
   body: string,
-  data?: Record<string, unknown>
+  data?: Record<string, unknown>,
+  channelId: string = "parking-alerts"
 ) => {
   try {
     await Notifications.scheduleNotificationAsync({
@@ -70,53 +64,86 @@ export const sendNotification = async (
   }
 };
 
-// Payment-specific notifications
-export const sendPaymentConfirmation = async (
-  booking: BookingType,
-  status: PaymentStatus
-) => {
-  const title = status === "paid" ? "Payment Successful" : "Payment Failed";
+// Payment Confirmation Notification
+export const sendPaymentConfirmation = async (booking: BookingType) => {
+  const title = "Payment Successful";
+  const body = `Successfully paid ₹${booking.amount} for parking slot ${booking.slotNumber}. Your parking time starts now.`;
 
-  const body =
-    status === "paid"
-      ? `Successfully paid ₹${booking.amount} for parking slot ${booking.slotNumber} at ${booking.parkingSpotDetails.parkingName}`
-      : `Payment of ₹${booking.amount} for parking slot ${booking.slotNumber} failed. Please try again.`;
-
-  await sendNotification(title, body, {
-    type: "PAYMENT_STATUS",
-    bookingId: booking.id,
-    status,
-  });
+  await sendNotification(
+    title,
+    body,
+    {
+      type: "PAYMENT_CONFIRMATION",
+      bookingId: booking.id,
+    },
+    "parking-alerts"
+  );
 };
 
-// Booking notifications
+// Booking Confirmation Notification
 export const sendBookingConfirmation = async (booking: BookingType) => {
   const title = "Booking Confirmed";
   const body = `Your parking slot ${booking.slotNumber} at ${booking.parkingSpotDetails.parkingName} has been booked successfully.`;
 
-  await sendNotification(title, body, {
-    type: "BOOKING_CONFIRMATION",
-    bookingId: booking.id,
-  });
+  await sendNotification(
+    title,
+    body,
+    {
+      type: "BOOKING_CONFIRMATION",
+      bookingId: booking.id,
+    },
+    "parking-alerts"
+  );
 };
 
 // Parking notifications
 export const sendParkingReminder = async (booking: BookingType) => {
-  const title = "Parking Time Reminder";
-  const body = `Your parking at ${booking.parkingSpotDetails.parkingName} will expire in 15 minutes.`;
+  const totalDurationMinutes = booking.duration * 60;
+  const warningMinutes =
+    booking.duration < 0.5
+      ? Math.ceil(totalDurationMinutes / 3) // 1/3 of total time for short bookings
+      : 15; // 15 minutes for longer bookings
 
-  await sendNotification(title, body, {
-    type: "PARKING_REMINDER",
-    bookingId: booking.id,
-  });
+  const title = "Parking Time Reminder";
+  const body = `Your parking at ${booking.parkingSpotDetails.parkingName} will expire in ${warningMinutes} minute${warningMinutes !== 1 ? "s" : ""}.`;
+
+  await sendNotification(
+    title,
+    body,
+    {
+      type: "PARKING_REMINDER",
+      bookingId: booking.id,
+    },
+    "parking-alerts"
+  );
+};
+
+export const sendParkingExpiryWarning = async (booking: BookingType) => {
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Parking Duration Ending Soon",
+        body: `Your parking at ${booking.parkingSpotDetails.parkingName} (Slot ${booking.slotNumber}) will expire in 15 minutes.`,
+        data: { bookingId: booking.id },
+      },
+      trigger: null, // Send immediately
+    });
+  } catch (error) {
+    console.error("Error sending expiry warning:", error);
+  }
 };
 
 export const sendParkingExpired = async (booking: BookingType) => {
-  const title = "Parking Time Expired";
-  const body = `Your parking duration for slot ${booking.slotNumber} at ${booking.parkingSpotDetails.parkingName} has expired.`;
-
-  await sendNotification(title, body, {
-    type: "PARKING_EXPIRED",
-    bookingId: booking.id,
-  });
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Parking Duration Expired",
+        body: `Your parking duration at ${booking.parkingSpotDetails.parkingName} (Slot ${booking.slotNumber}) has ended. Please move your vehicle.`,
+        data: { bookingId: booking.id },
+      },
+      trigger: null, // Send immediately
+    });
+  } catch (error) {
+    console.error("Error sending expiry notification:", error);
+  }
 };

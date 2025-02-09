@@ -549,11 +549,6 @@ const SlotBookingModal = () => {
         }
       });
 
-      // Update selected slot if it was previously selected
-      if (selectedSlot && newSlotStatus[selectedSlot]) {
-        newSlotStatus[selectedSlot].status = "selected";
-      }
-
       setSlotStatus(newSlotStatus);
     });
 
@@ -566,20 +561,26 @@ const SlotBookingModal = () => {
       return;
     }
 
-    if (!parkingData?.id) return;
-
-    const currentStatus = slotStatus[slot.id];
-
-    // Check if slot is booked
-    if (currentStatus?.status === "booked") {
-      Alert.alert("Error", "This slot is already booked");
+    if (!parkingData) {
+      Alert.alert("Error", "Parking data not available");
       return;
     }
 
-    // Double-check availability with server
+    const currentStatus = slotStatus[slot.id];
+
+    // Can't select if booked
+    if (currentStatus?.status === "booked") {
+      Alert.alert("Slot Unavailable", "This slot is already booked");
+      return;
+    }
+
+    // Double-check availability before selection
     const isAvailable = await validateSlotAvailability(parkingData.id, slot.id);
     if (!isAvailable) {
-      Alert.alert("Error", "This slot is no longer available");
+      Alert.alert(
+        "Slot Unavailable",
+        "This slot was just booked by someone else"
+      );
       return;
     }
 

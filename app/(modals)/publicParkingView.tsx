@@ -34,12 +34,12 @@ const PublicParkingView: React.FC = () => {
     if (__DEV__) {
       // For Android emulator, use 10.0.2.2 to access localhost
       if (Platform.OS === "android") {
-        return "http://192.168.60.44:5000";
+        return "http://172.16.16.165:5000";
       }
       // For iOS simulator, use localhost
-      return "http://192.168.60.44:5000";
+      return "http://172.16.16.165:5000";
     }
-    return "http://192.168.60.44:5000";
+    return "http://172.16.16.165:5000";
   };
 
   const updateParkingSlots = (availableSlots: number): void => {

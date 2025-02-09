@@ -10,33 +10,42 @@ import {
   sendParkingReminder,
   sendParkingExpired,
 } from "@/services/notificationService";
+import { Timestamp } from "firebase/firestore";
+// import { ParkingTimerTest } from "./ParkingTimerTest";
 
 interface ActiveBookingCardProps {
   booking: BookingType;
   onStatusChange?: () => void;
 }
 
+// Helper function to convert Timestamp to Date
+const getFormattedTime = (time: Date | Timestamp): string => {
+  if (time instanceof Date) {
+    return time.toLocaleTimeString();
+  }
+  return time.toDate().toLocaleTimeString();
+};
+
 export const ActiveBookingCard: React.FC<ActiveBookingCardProps> = ({
   booking,
   onStatusChange,
 }) => {
   const handleTimeWarning = async () => {
-    console.log("Handling Time Warning...");
+    console.log("Sending 15-minute warning notification...");
     await sendParkingReminder(booking);
   };
 
   const handleTimeExpired = async () => {
-    console.log("Handling Time Expired...");
+    console.log("Handling parking expiry...");
     if (booking.bookingStatus === "confirmed" && booking.id) {
-      console.log("Completing Booking ID:", booking.id);
+      console.log("Completing booking and sending expiry notification...");
       const result = await completeBooking(booking.id);
 
       if (result.success) {
-        console.log("Booking completed successfully!");
         await sendParkingExpired(booking);
         onStatusChange?.();
       } else {
-        console.error("Failed to complete booking.");
+        console.error("Failed to complete booking on expiry");
       }
     }
   };
@@ -52,6 +61,7 @@ export const ActiveBookingCard: React.FC<ActiveBookingCardProps> = ({
           onTimeWarning={handleTimeWarning}
           onTimeExpired={handleTimeExpired}
         />
+        {/* <ParkingTimerTest booking={booking} /> */}
       </View>
 
       <View style={styles.details}>
@@ -79,16 +89,16 @@ export const ActiveBookingCard: React.FC<ActiveBookingCardProps> = ({
             {booking.duration}h
           </Typo>
         </View>
-        <View style={styles.detailRow}>
-          <Typo size={14} color={colors.neutral600}>
-            End Time
-          </Typo>
-          <Typo size={14} color={colors.neutral800}>
-            {booking.endTime instanceof Date
-              ? booking.endTime.toLocaleTimeString()
-              : booking.endTime.toDate().toLocaleTimeString()}
-          </Typo>
-        </View>
+        {booking.startTime && (
+          <View style={styles.detailRow}>
+            <Typo size={14} color={colors.neutral600}>
+              Start Time
+            </Typo>
+            <Typo size={14} color={colors.neutral800}>
+              {getFormattedTime(booking.startTime)}
+            </Typo>
+          </View>
+        )}
       </View>
     </View>
   );
