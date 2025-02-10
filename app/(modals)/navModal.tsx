@@ -17,7 +17,7 @@ import { Picker } from "@react-native-picker/picker";
 import { GeminiNavigationService } from "@/services/GeminiNavigation";
 import { PathInfo, Coordinates } from "@/types";
 const GEMINI_API_KEY = "AIzaSyDmRxYJVe99wvGKUe4PK_mFiVXaqXISrUk";
-const API_URL = "http://172.16.16.165:5000";
+const API_URL = "http://192.168.60.44:5000";
 
 interface ApiResponse {
   nodes: string[];
@@ -163,7 +163,7 @@ export default function NavigationScreen() {
           <Text style={styles.title}>Parking Lot Navigation</Text>
 
           <View style={styles.pickerContainer}>
-            <Text style={styles.label}>Source Node:</Text>
+            <Text style={styles.label}>Enter Your Starting Point:</Text>
             <View style={styles.pickerWrapper}>
               <Picker
                 selectedValue={source}
@@ -184,7 +184,7 @@ export default function NavigationScreen() {
           </View>
 
           <View style={styles.pickerContainer}>
-            <Text style={styles.label}>Destination Node:</Text>
+            <Text style={styles.label}>Choose Destination:</Text>
             <View style={styles.pickerWrapper}>
               <Picker
                 selectedValue={destination}

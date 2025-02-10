@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-# Initialize lists to store coordinates and lines
+
 coords = []
 all_lines = []
 
