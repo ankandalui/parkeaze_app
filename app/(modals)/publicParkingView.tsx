@@ -337,11 +337,11 @@ const PublicParkingView: React.FC = () => {
   const getSocketUrl = (): string => {
     if (__DEV__) {
       if (Platform.OS === "android") {
-        return "http://192.168.60.44:5000";
+        return "http://192.168.182.44:5000";
       }
-      return "http://192.168.60.44:5000";
+      return "http://192.168.182.44:5000";
     }
-    return "http://192.168.60.44:5000";
+    return "http://192.168.182.44:5000";
   };
 
   const parseSlotStatus = (statusArray: string[]): string[] => {

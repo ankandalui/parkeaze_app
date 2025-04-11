@@ -143,7 +143,7 @@ const NearbyCard = ({
                   color={colors.white}
                 />
                 <Typo size={14} color={colors.white} fontWeight="600">
-                  {spot.price === 0 ? "Free" : `${spot.price}/hr`}
+                  {spot.price === 0 ? "Free" : `₹{spot.price}/hr`}
                 </Typo>
               </View>
             )}

@@ -832,7 +832,7 @@ const CustomMap = forwardRef<CustomMapRef, CustomMapProps>(
                     </Text>
                   </View>
                   <Text style={styles.cardPrice}>
-                    {spot.price ? `$${spot.price}/hr` : "Free"}
+                    {spot.price ? `₹${spot.price}/hr` : "Free"}
                   </Text>
                 </View>
 

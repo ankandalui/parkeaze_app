@@ -35,7 +35,7 @@ def redraw_lines(frame):
         cv2.line(frame, tuple(line[0]), tuple(line[1]), (255, 0, 0), 2)
 
 # Start capturing video
-cap = cv2.VideoCapture("http://192.168.137.165:8080/video")  # Use 0 for the webcam feed
+cap = cv2.VideoCapture("http://192.168.182.225:8080/video")  # Use 0 for the webcam feed
 
 if not cap.isOpened():
     print("Error: Could not open video stream.")

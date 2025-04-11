@@ -28,7 +28,7 @@ export class GeminiNavigationService {
   private baseUrl: string;
 
   constructor(apiKey: string) {
-    this.apiKey = apiKey;
+    this.apiKey = "AIzaSyDmRxYJVe99wvGKUe4PK_mFiVXaqXISrUk";
     this.baseUrl =
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
   }

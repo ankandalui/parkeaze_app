@@ -16,8 +16,8 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import { GeminiNavigationService } from "@/services/GeminiNavigation";
 import { PathInfo, Coordinates } from "@/types";
-const GEMINI_API_KEY = "";
-const API_URL = "http://192.168.60.44:5000";
+const GEMINI_API_KEY = "AIzaSyDmRxYJVe99wvGKUe4PK_mFiVXaqXISrUk";
+const API_URL = "http://192.168.182.44:5000";
 
 interface ApiResponse {
   nodes: string[];

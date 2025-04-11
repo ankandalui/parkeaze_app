@@ -5,7 +5,8 @@ import SimpleParkingMonitor from "@/components/SimpleParkingMonitor";
 const PublicParking = () => {
   return (
     <View>
-      <SimpleParkingMonitor />
+      {/* <SimpleParkingMonitor /> */}
+      <Text>Demo page</Text>
     </View>
   );
 };

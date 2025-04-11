@@ -502,7 +502,7 @@ const PaymentModal = () => {
 
       if (response.success) {
         // Send success notification
-        await sendPaymentConfirmation(bookingWithId, "paid");
+        await sendPaymentConfirmation(bookingWithId);
 
         router.push({
           pathname: "/(modals)/ticketModal",
@@ -516,7 +516,7 @@ const PaymentModal = () => {
         });
       } else {
         // Send failure notification
-        await sendPaymentConfirmation(bookingWithId, "failed");
+        await sendPaymentConfirmation(bookingWithId);
 
         throw new Error(response.msg);
       }

@@ -577,7 +577,7 @@ from shapely.geometry import Polygon
 import time
 import socketio
 sio = socketio.Client()
-sio.connect('http://192.168.60.44:5000') 
+sio.connect('http://192.168.182.44:5000') 
 client_id = 1
 
 total_slots=5
@@ -585,16 +585,16 @@ prev_status=5
 
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
 
-video_source = ("https://192.168.60.109:8080/video")
+video_source = ("http://192.168.182.225:8080/video")
 dw=640
 dh=480
 
 parking_slots = [
-    np.array([[179, 171], [107, 260], [9, 215], [70, 136]], dtype=np.int32).reshape((-1, 1, 2)),  
-    np.array([[173, 165], [110, 258], [220, 298], [264, 194]], dtype=np.int32).reshape((-1, 1, 2)),  
-    np.array([[274, 196], [227, 299], [342, 337], [377, 225]], dtype=np.int32).reshape((-1, 1, 2)),
-    np.array([[382, 225], [346, 339], [483, 384], [505, 258]], dtype=np.int32).reshape((-1, 1, 2)), 
-    np.array([[508, 261], [487, 388], [633, 436], [630, 288]], dtype=np.int32).reshape((-1, 1, 2))    
+    np.array([[68, 326], [190, 306], [200, 374], [73, 396]], dtype=np.int32).reshape((-1, 1, 2)),  
+    np.array([[199, 303], [297, 286], [315, 348], [211, 372]], dtype=np.int32).reshape((-1, 1, 2)),  
+    np.array([[315, 291], [394, 272], [419, 319], [325, 341]], dtype=np.int32).reshape((-1, 1, 2)),
+    np.array([[412, 265], [496, 249], [521, 305], [427, 325]], dtype=np.int32).reshape((-1, 1, 2)), 
+    np.array([[503, 253], [584, 234], [619, 287], [526, 304]], dtype=np.int32).reshape((-1, 1, 2))    
 ]
 
 def preprocess_image(image):

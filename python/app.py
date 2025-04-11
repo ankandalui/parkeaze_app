@@ -64,7 +64,7 @@ if __name__ == '__main__':
         # Log the server URLs
         logger.info("Starting server on:")
         logger.info("- Local: http://127.0.0.1:5000")
-        logger.info("- Network: http://192.168.60.44:5000")  # Your computer's IP
+        logger.info("- Network: http://192.168.182.44:5000")  # Your computer's IP
         
         socketio.run(
             app,
